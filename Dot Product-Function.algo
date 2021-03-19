@@ -1,0 +1,72 @@
+FUNCTION verify_length() : INTEGER
+VAR
+    l : INTEGER: 
+BEGIN
+    REPEAT
+        Read(l);
+    UNTIL (l <= 0 or l> 2 )
+    RETURN l ;
+END
+PROCEDURE vector_coordinates(l: INTEGER, VAR V: ARRAY_OF FLOAT)
+VAR
+    i: INTEGER;
+BEGIN
+    FOR i FROM 0 TO l-1 STEP 1  DO
+        Read(V[i]);
+    END_FOR
+END
+
+FUNCTION dot_product(VAR  a : ARRAY_OF FLOAT, VAR b : ARRAY_OF FLOAT) : FLOAT
+VAR
+    i,j : INTEGER;
+    dp : FLOAT:=0;
+BEGIN
+    IF (a.length <> b.length) THEN
+        Write("Error! Vectors have diffrents sizes. Impossible to calculate the dot product.")
+    ELSE
+        j:=0
+        FOR i FROM 0 TO a.length-1 STEP 1  DO
+            REPEAT
+                dp = dp + a[i]*b[j];
+            UNTIL (j < i)
+            j := j + 1;
+    END_FOR
+    RETURN dp;
+    END_IF
+END
+
+PROCEDURE verify_orthogonality(dp : FLOAT)
+VAR
+BEGIN
+    IF (dp = 0) THEN
+        Write("The vectors are orthogonals");
+    ELSE
+        Write("The vectors are not orthogonals")
+END
+
+ALGORITHM orthogonal_vectors
+VAR     
+    v1,v2 : ARRAY_OF FLOAT[2];
+    ps : FLOAT;
+    i,l1,l2,n,j:  INTEGER;
+BEGIN
+    Write("Enter the number of pairs vectors to be verifyed : ");
+    Read(n);
+    j:=0;
+    REPEAT
+        Write("Enter the length of the first vector : ");
+        l1 := verify_length();
+        Write("Enter the length of the second vector : ");
+        l2 := verify_length();
+
+        Write("Vectors coordinates are :");
+        vector_coordinates(l1, v1);
+        vector_coordinates(l2, v2);
+
+        ps := dot_product(v1, v2);
+        Write("The scalar product of two vectors is : ", ps);
+
+        verify_orthogonality(ps);
+        j++;
+    UNTIL (j = n)
+END
